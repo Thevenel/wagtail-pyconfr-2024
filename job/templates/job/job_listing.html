@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content  %}
+<section class="container mt-5">
+    <div class="text-center w-50 mx-auto">
+        <h1 class="display-4">{{ page.title }}</h1>
+    <p class="lead">
+        {{ page.intro|richtext }}
+    </p>
+    </div>
+    <div class="row row-cols-sm-2 row-cols-md-3 g-3">
+        {% for job in jobs %}
+        <div class="col">
+            <div class="card shadow-sm border-0 px-0">
+                <div class="card-body">
+                <h2 class="text-primary">{{job.title}}</h2>
+                <p class="card-subtitle text-muted">{{job.company}}</p>
+                </div>
+                    {% if job.thumbnail %}
+                    <div>
+                        {% picture job.thumbnail format-webp fill-350x200 class="card-img"%}
+                    </div>
+                    {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none" width="100%" height="200" aria-label="Placeholder: Image cap" focusable="false" role="img" preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180" style="font-size:1.125rem;text-anchor:middle">
+                        <rect width="100%" height="100%" fill="#868e96"></rect>
+                        <text x="50%" y="50%" fill="#dee2e6" dy=".3em">{{ job.title }}</text>
+                        </svg>
+                    {% endif %}
+                
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div class="mb-2">
+                            <div class="text-dark"> {{ job.salary }} €</div>
+                            <div class="text-body-secondary">{{ job.location }}</div>
+                        </div>
+                        <small class="text-muted">{{ job.date|timesince }} ago </small>
+                    </div>
+                    <p class="card-text text-body-secondary">{{ job.short_description }}</p>
+                    <a href="{{ job.url }}" class="btn btn-primary">View Job</a>
+                </div>
+            </div>
+        </div>
+        
+        {% endfor %}
+    </div>
+</section>
+{% endblock content %}

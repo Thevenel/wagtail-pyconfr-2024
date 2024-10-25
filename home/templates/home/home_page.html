@@ -1,21 +1,99 @@
 {% extends "base.html" %}
-{% load static %}
+{% load wagtailcore_tags wagtailimages_tags wagtailadmin_tags %}
 
-{% block body_class %}template-homepage{% endblock %}
-
-{% block extra_css %}
-
-{% comment %}
-Delete the line below if you're just getting started and want to remove the welcome screen!
-{% endcomment %}
-<link rel="stylesheet" href="{% static 'css/welcome_page.css' %}">
-{% endblock extra_css %}
-
+{% block body_class %}{% endblock body_class %}
 {% block content %}
 
-{% comment %}
-Delete the line below if you're just getting started and want to remove the welcome screen!
-{% endcomment %}
-{% include 'home/welcome_page.html' %}
+    <section class="container-fluid position-relative p-0">
+        {% if page.image %}
+            <div>
+                {% picture page.image format-webp fill-1920x680 sizes="100vw" alt="Hero image" class="img-fluid w-100"%}
+            </div>
+        {% endif %}
+            <div class="z-1 position-absolute bg-black w-100 top-0 bottom-0 bg-opacity-50 right-0 left-0"></div>
+        <div class="container z-2 position-absolute top-50 start-50 translate-middle text-white">
+            <div class="row mt-5">
+                <div class="col-md-6 col-md-offset-1 col-lg-5">
+                    <h1 class="display-4">{{ page.title }}</h1>
+                    <p class="lead">{{ page.hero_text }}</p>
+                    {% if page.hero_cta_link %}
+                        <a href="{{ page.hero_cta_link.url }}" class="btn btn-primary btn-lg"> {{ page.hero_cta }}</a>
+                    {% else %}
+
+                        <span class="btn btn-primary btn-lg">{{ page.hero_cta }}</span>
+                        
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="container mt-5">
+        {% if page.feature_section_title %}
+            <h2 class="display-5 text-primary text-center">{{ page.feature_section_title }}</h2>
+        {% endif %}
+
+        <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+            {% for feature in page.features %}
+                {% if feature.block_type == 'feature_icon' %}
+            <div class="col">
+                <div class="d-inline-flex align-items-center justify-content-center fs-2 mb-3">
+                    {% picture feature.value fill-60x60 %}
+                </div>
+                {% elif feature.block_type == 'feature_title' %}
+                <h3 class="fs-2 text-primary">{{ feature.value }}</h3>
+                {% elif feature.block_type == 'feature_desc' %}
+                <p>{{ feature.value }}</p>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="container mt-5">
+        <h2 class="display-4 text-primary text-center">Recent Jobs</h2>
+        
+        <div class="row mb-2 py-5">
+            {% for job in jobs %}
+            <div class="col-md-8 m-auto">
+                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <!-- Text content on the left -->
+                    <div class="col p-4 d-flex flex-column">
+                        <div class="mb-4">
+                            <strong class="d-inline-block mb-2 text-primary-emphasis">{{ job.company }}</strong>
+                            <h3 class="mb-0">{{ job.title }}</h3>
+                            <div>
+                                <span class="mb-1 text-body-secondary">{{ job.location }}</span>
+                                <span> - </span>
+                                <span class="mb-1 text-muted">{{ job.salary }}€</span>
+                            </div>
+                            <p class="card-text mb-auto">{{ job.short_description }}</p>
+                        </div>
+                        <!-- CTA button -->
+                        <div>
+                            <a href="{{ job.url }}" class="btn btn-primary btn-lg">View Job</a>
+                        </div>
+                    </div>
+    
+                    <!-- Image on the right -->
+                    <div class="col-md-4 d-flex align-item-center justify-content-center">
+                        {% if job.thumbnail %}
+                        <div class="h-100">
+                            {% picture job.thumbnail format-webp class="img-fluid h-100" %}
+                        </div>
+                        {% else %}
+                        <svg class="bd-placeholder-img h-100 w-100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+                            <title>Placeholder</title>
+                            <rect width="100%" height="100%" fill="#55595c"/>
+                            <text x="50%" y="50%" fill="#eceeef" dy=".3em">{{ job.title }}</text>
+                        </svg>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    
 
 {% endblock content %}

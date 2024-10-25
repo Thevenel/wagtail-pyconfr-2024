@@ -1,0 +1,15 @@
+{% extends "base.html" %} 
+{% load wagtailcore_tags wagtailimages_tags %} 
+
+{% block content %}
+
+    {{self.title}}
+    {{self.salary}}
+
+    {% for block in self.content %}
+        {{block}}
+    {% endfor %}
+
+{% endblock content %}
+
+
