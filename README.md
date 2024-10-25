@@ -472,3 +472,46 @@ On peut maintenant passer à l'étape suivante qui est de créer un `jobboard/te
 ```
 
 Dans cette portion de code, on crée un alias pour notre méthode `get_site_root` et le définit comme le lien vers lequel on se rédirige en cliquant sur `Home`. Ensuite, on crée une boucle pour parcourir les pages et récupérer celles qui sont publiques et font partie du menu. On peut maintenant ajouter d'autres pages dans le menu en cliquant dans l'onglet `promote` et cocher la case `show in menus`.
+
+
+## Le pied de page
+
+À ce point, l'implementation du pied de page nous parraitra plus simple car on comprend mieux le principe. Toutefois, il existe deux types d'implementation. La première se fait en créant des paramètres de navigation et la seconde à l'aide de `snippets`. Pour faire simple, on va utiliser la méthode, vous pouvez voir la seconde implementation [ici](https://docs.wagtail.org/en/latest/tutorial/create_footer_for_all_pages.html#create-editable-footer-text-with-wagtail-snippets).
+
+> Il est recommandé de créer une app `base` dans laquelle se trouve tous fichiers mais, on l'ajouter dans `home/models.py` pour simplifier la tache.
+
+```python
+# new imports
+from wagtail.contrib.settings.models import (
+    BaseGenericSetting,
+    register_setting
+)
+
+@register_setting
+class NavigationSettings(BaseGenericSetting):
+    linkedin_url = models.URLField(verbose_name="Linkedin URL", blank=True)
+    github_url = models.URLField(verbose_name="GitHub URL", blank=True)
+    mastodon_url = models.URLField(verbose_name="Mastodon URL", blank=True)
+    
+    panels = [
+        MultiFieldPanel(
+            [
+                FieldPanel("linkedin_url"),
+                FieldPanel("github_url"),
+                FieldPanel("mastodon_url")
+            ],
+            "Social settings"
+        )
+    ]
+```
+
+> N'oubliez pas les migrations
+
+Les paramètres généraux communs entre toutes les pages se trouvent dans le module `wagtail.contrib.settings`. On doit enregistrer ce module dans la liste des `INSTALLED_APPS`.
+
+```python
+INSTALLED_APPS = [
+    # ... cette ligne permet d'installer wagtail.contrib.settings
+    "wagtail.contrib.settings",
+]
+```
