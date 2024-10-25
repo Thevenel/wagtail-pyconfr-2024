@@ -515,3 +515,29 @@ INSTALLED_APPS = [
     "wagtail.contrib.settings",
 ]
 ```
+
+La prochaine étape consiste à enregistrer les paramètres dans le processeur de context. Ce dernier rend les paramètres accessibles dans les `templates`. Pour y enregistrer les paramètres, on ajoute cette ligne dans `jobboard/settings/base.py`: `"wagtail.contrib.settings.context_processors.settings",`
+
+```python
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [
+            os.path.join(PROJECT_DIR, "templates"),
+        ],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+
+                # Add this to register the _settings_ context processor:
+                "wagtail.contrib.settings.context_processors.settings",
+            ],
+        },
+    },
+]
+```
+
