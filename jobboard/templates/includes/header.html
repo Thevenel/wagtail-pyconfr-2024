@@ -1,0 +1,32 @@
+{% load wagtailcore_tags navigation_tags %}    
+    <header>
+        {% get_site_root as site_root %}
+        <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+            <div class="container">
+                    <a class="navbar-brand fs-4" href="{% pageurl site_root %}">JOBBOARD</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+               
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{% pageurl site_root %}">Home
+                                <span class="visually-hidden">(current)</span>
+                            </a>
+                        </li>
+                        {% for menuitem in site_root.get_children.live.in_menu %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% pageurl menuitem %}">{{ menuitem.title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <form class="d-flex" action="{% url 'search' %}" method="get" >
+                        <input class="form-control me-sm-2" type="search" name="query"{% if search_query %} value="{{ search_query }}"{% endif %} placeholder="Search" control-id="ControlID-1">
+                        <button class="btn btn-secondary my-2 my-sm-0" type="submit" control-id="ControlID-2">Search</button>
+                    </form>
+                </div>
+    
+            </div>
+        </nav>
+    </header>
