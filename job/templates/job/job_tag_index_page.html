@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+
+    <section class='container'>
+        {% if request.GET.tag %}
+            <h4 class='lead'>Showing jos tagged "{{ request.GET.tag }}"</h4>
+        {% endif %}
+        {% for job in jobs %}
+            <p>
+                <strong><a href="{% pageurl job %}">{{ job.title }}</a></strong><br />   
+            </p>
+        {% empty %}
+            No Jobs found with that tag.
+        {% endfor %}
+    </section>
+
+{% endblock %}

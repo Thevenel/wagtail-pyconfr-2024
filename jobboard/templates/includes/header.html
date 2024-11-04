@@ -15,13 +15,11 @@
                                 <span class="visually-hidden">(current)</span>
                             </a>
                         </li>
-                        
                         {% for menuitem in site_root.get_children.live.in_menu %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% pageurl menuitem %}">{{ menuitem.title }}</a>
                             </li>
                         {% endfor %}
-                        
                     </ul>
                     <form class="d-flex" action="{% url 'search' %}" method="get" >
                         <input class="form-control me-sm-2" type="search" name="query"{% if search_query %} value="{{ search_query }}"{% endif %} placeholder="Search" control-id="ControlID-1">

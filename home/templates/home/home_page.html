@@ -34,7 +34,7 @@
         {% endif %}
 
         <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
-            {% for feature in page.features %}
+            {% for feature in self.features %}
                 {% if feature.block_type == 'feature_icon' %}
             <div class="col">
                 <div class="d-inline-flex align-items-center justify-content-center fs-2 mb-3">

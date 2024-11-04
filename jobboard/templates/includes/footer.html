@@ -1,0 +1,20 @@
+<footer class="container-fluid p-0 bg-primary mt-auto" data-bs-theme="dark">
+    <div class="py-3 my-4  container">
+        {% with linkedin_url=settings.home.NavigationSettings.linkedin_url github_url=settings.home.NavigationSettings.github_url mastodon_url=settings.home.NavigationSettings.mastodon_url %}
+        {% if linkedin_url or github_url or mastodon_url %}
+            <div class="d-flex justify-content-center mb-2">
+                {% if linkedin_url %}
+                    <a class="text-body-secondary text-decoration-none px-2 link-secondary" href="{{ linkedin_url}}">Linkedin</a>
+                {% endif %}
+                {% if github_url %}
+                    <a class="text-body-secondary text-decoration-none px-2 link-secondary" href="{{ github_url}}">GitHub</a>
+                {% endif %}
+                {% if mastodon_url %}
+                    <a class="text-body-secondary text-decoration-none px-2 link-secondary" href="{{ mastodon_url}}">Mastodon</a>
+                {% endif %}
+            </div>
+        {% endif %}
+        {% endwith %}
+      <p class="text-center text-body-secondary">&copy; <a href="/">JOBBOARD - 2024</a></p>
+    </div>
+  </footer>

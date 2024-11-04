@@ -3,13 +3,53 @@
 
 {% block content %}
 
-    {{self.title}}
-    {{self.salary}}
-
-    {% for block in self.content %}
-        {{block}}
-    {% endfor %}
-
+<section class="container mt-5 mb-5">
+  <div class="row g-5">
+    <div class="col-md-8">
+      <article>
+        <h2 class="display-5 link-body-emphasis mb-1">{{ page.title }}</h2>
+        <p>
+          {{ page.date|date:"F j, Y" }} by {{ page.company }}
+        </p>
+        {% for block in page.content %} {{ block }} {% endfor %}
+      </article>
+    </div>
+    
+    <div class="col-md-4">
+      <div class="position-sticky" style="top: 2rem">
+        <div>
+          <h4 class="fst-italic">Recent Jobs</h4>
+          <ul class="list-unstyled">
+            {% for recent_job in jobs %}
+              <li>
+                <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
+                href="{{ recent_job.url }}">
+                  {% if recent_job.thumbnail %} 
+                    {% picture recent_job.thumbnail format-webp fill-96x96 class="img-fluid rounded" %}
+                  {% endif %}
+                  <div class="col-lg-8">
+                    <h4 class="mb-0">{{ recent_job.title }}</h4>
+                    <small class="text-body-secondary">{{ recent_job.date|date:"F j, Y" }}</small>
+                  </div>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="container mb-5">
+  {% with tags=page.tags.all %}
+    {% if tags %}
+      <div>
+        <p>Tags: </p>
+        {% for tag in tags %}
+          <a href="{% slugurl 'tags' %}?tag={{ tag }}"><button class='btn btn-primary' type='button'>{{ tag }}</button></a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+</section>
 {% endblock content %}
-
-

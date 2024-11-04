@@ -6,18 +6,22 @@
 {% block title %}Search{% endblock %}
 
 {% block content %}
-<h1>Search</h1>
 
-<form action="{% url 'search' %}" method="get">
-    <input type="text" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
-    <input type="submit" value="Search" class="button">
+    <section class="container mt-5">
+        <h1 class="display-4 text-primary">Search</h1>
+
+<form action="{% url 'search' %}" method="get" class='col-md-6'>
+    <div class="mb-3 d-flex">
+        <input class="form-control" type="text" placeholder="e.g Full Stack Developer" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
+        <input type="submit" value="Search" class="btn btn-primary">
+    </div>
 </form>
 
 {% if search_results %}
-<ul>
+<ul class="list-group col-md-8">
     {% for result in search_results %}
-    <li>
-        <h4><a href="{% pageurl result %}">{{ result }}</a></h4>
+    <li class="list-group-item list-group-item-light mb-2">
+        <h2 class="lead"><a class="text-decoration-none" href="{% pageurl result %}">{{ result }}</a></h2>
         {% if result.search_description %}
         {{ result.search_description }}
         {% endif %}
@@ -35,4 +39,6 @@
 {% elif search_query %}
 No results found
 {% endif %}
+    </section>
+
 {% endblock %}

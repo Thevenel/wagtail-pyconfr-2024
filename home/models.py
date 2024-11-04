@@ -1,13 +1,20 @@
 from django.db import models
-
-from wagtail.models import Page
-from wagtail import blocks
-from wagtail.fields import StreamField
-from wagtail.images.blocks import ImageChooserBlock
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel
-
 from job.models import JobPage
 
+from wagtail.models import Page
+from wagtail.fields import StreamField
+from wagtail.images.blocks import ImageChooserBlock
+from wagtail import blocks
+
+
+from wagtail.admin.panels import (
+    MultiFieldPanel,
+    FieldPanel
+)
+from wagtail.contrib.settings.models import (
+    BaseGenericSetting,
+    register_setting
+)
 
 class HomePage(Page):
     image = models.ForeignKey(
@@ -40,12 +47,7 @@ class HomePage(Page):
             ('feature_title', blocks.CharBlock(required=True)),
             ('feature_desc', blocks.CharBlock(required=True))
         ],
-        block_counts =
-            {
-                'feature_icon':{'max_num':3},
-                'feature_title':{'max_num':3},
-                'feature_desc': {'max_num':3}
-            },
+        
         null = True,
         blank = True
     )
@@ -63,12 +65,31 @@ class HomePage(Page):
                     [
                         FieldPanel("hero_cta"),
                         FieldPanel("hero_cta_link")
-                        
                     ]
-                ) 
+                )
+                
             ],
             heading = "Hero section"
         ),
         FieldPanel("feature_section_title"),
         FieldPanel("features")
     ]
+
+@register_setting
+class NavigationSettings(BaseGenericSetting):
+    linkedin_url = models.URLField(verbose_name="Linkedin URL", blank=True)
+    github_url = models.URLField(verbose_name="GitHub URL", blank=True)
+    mastodon_url = models.URLField(verbose_name="Mastodon URL", blank=True)
+    
+    panels = [
+        MultiFieldPanel(
+            [
+                FieldPanel("linkedin_url"),
+                FieldPanel("github_url"),
+                FieldPanel("mastodon_url")
+            ],
+            "Social settings"
+        )
+    ]
+    
+

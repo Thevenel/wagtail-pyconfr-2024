@@ -1,29 +1,47 @@
-# Django imports
 from django.db import models
-from django.utils import timezone
-
-# Wagtail imports
+from wagtail.search import index
+from modelcluster.fields import ParentalKey
+from modelcluster.contrib.taggit import ClusterTaggableManager
 from wagtail.models import Page
 from wagtail.fields import RichTextField, StreamField
 from wagtail.admin.panels import FieldPanel
-from wagtail import blocks
 from wagtail.images.blocks import ImageChooserBlock
+from wagtail import blocks
+from django.utils import timezone
 
+from taggit.models import TaggedItemBase
 
-# Create your models here.
 class JobListing(Page):
     intro = RichTextField()
     
     content_panels = Page.content_panels + [
         FieldPanel("intro")
     ]
+    
     def get_context(self, request):
         # Update context to include all live JobPage instances
         context = super().get_context(request)
         context['jobs'] = JobPage.objects.live()  # Fetch all published JobPage objects
         return context
+
+class JobPageTag(TaggedItemBase):
+    content_object = ParentalKey(
+        'JobPage', 
+        on_delete=models.CASCADE,
+        related_name='tagged_items'
+    )
     
-    
+class JobTagIndexPage(Page):
+ 
+    def get_context(self, request):
+        #filter by tag
+        tag = request.GET.get('tag')
+        jobs = JobPage.objects.filter(tags__name=tag)
+        context = super().get_context(request)
+        context['jobs'] = jobs
+        return context
+        
+        
 class JobPage(Page):
     date = models.DateField("Published Date", default=timezone.now)
     location = models.CharField(max_length=100)
@@ -38,7 +56,7 @@ class JobPage(Page):
     )
     salary = models.IntegerField(verbose_name="A salary approximation")
     company = models.CharField(max_length=200)
-    # update
+    tags = ClusterTaggableManager(through=JobPageTag, blank=True)
     content = StreamField(
         [
             ('heading', blocks.CharBlock(form_classname='full title', template='blocks/heading.html')),
@@ -53,6 +71,11 @@ class JobPage(Page):
         
     )
     
+    def get_context(self, request):
+        context = super().get_context(request)
+        context['jobs'] = JobPage.objects.live().order_by('-first_published_at')
+        return context
+    
     content_panels = Page.content_panels + [
         FieldPanel("date"),
         FieldPanel("location"),
@@ -60,5 +83,11 @@ class JobPage(Page):
         FieldPanel("thumbnail"),
         FieldPanel("salary"),
         FieldPanel("company"),
-        FieldPanel("content") # update
+        FieldPanel("content"),
+        FieldPanel("tags"),
+    ]
+    
+    search_fields = Page.search_fields + [
+        index.SearchField('location'),
+        index.SearchField('company'),
     ]
