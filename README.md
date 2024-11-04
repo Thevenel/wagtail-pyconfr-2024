@@ -2,14 +2,14 @@
 
 ## Initialisation du projet
 
-Créez un dossier dans le repertoire de votre choix.
+Créer un dossier dans le repertoire désiré.
 
 ```bash
 mkdir jobboard
 cd jobboard
 ```
 
-### Configurez l'environnement virtuel
+### Configuration de l'environnement virtuel
 
 Création de l'environnement
 
@@ -23,7 +23,7 @@ Activation de l'environnement
 source env/bin/activate
 ```
 
-### Installation wagtail
+### Installation Wagtail
 
 ```bash
 pip install wagtail
@@ -42,7 +42,7 @@ Assurez-vous d'être dans le repertoire `jobboard` créé précédemment et n'ou
 wagtail start jobboard .
 ```
 
-Afin d'assurer la compatibilité des dépedances, Wagtail nous crée un fichier `requirements.txt`. Il est important de les installer afin que le projet lance convenablement.
+Afin d'assurer la compatibilité des dépendances, Wagtail nous crée un fichier `requirements.txt`. Il est important de les installer afin que le projet se lance correctement.
 
 ```bash
 pip install -r requirements.txt
@@ -60,7 +60,7 @@ python manage.py migrate
 python manage.py createsuperuser
 ```
 
-Cette commande permet de créer un nom d'utilisateur et un mot de passe pour connecter dans l'interface admin de Wagtail.
+Cette commande permet de créer un nom d'utilisateur et un mot de passe pour se connecter dans l'interface admin de Wagtail.
 
 **Lancement du serveur de développement**
 
@@ -68,7 +68,7 @@ Cette commande permet de créer un nom d'utilisateur et un mot de passe pour con
 python manage.py runserver
 ```
 
-Maintenant visitez <http://127.0.0.1:8000>, si vous voyez cette page, tout va bien et on est prêts pour la suite.
+Maintenant visitez <http://127.0.0.1:8000>, si vous voyez cette page, tout va bien et on est prêt pour la suite.
 
 Pour plus d'infos, [consultez la documentation](https://docs.wagtail.org/en/stable/getting_started/tutorial.html).
 
@@ -111,13 +111,13 @@ Dans Wagtail, on ne travaillle pas avec `View` et la majeur partie du travail se
 
 **StreamField :** C'est un champ puissant qui permet de créer des pages de contenus structurés en utilisant des `blocks`.
 
-**Blocks :** Ce sont des contenus réutilisables à l'intérieur d'un champ `StreamField`. Wagtail contient plusieurs `blocks` intégrés, mais vous pouvez créer des `blocks` personnalisés.
+**Blocks :** Ce sont des contenus réutilisables à l'intérieur d'un champ `StreamField`. Wagtail contient plusieurs `blocks` intégrés, mais on peut aussi créer des `blocks` personnalisés.
 
 **Images, Documents, Snippets :** Ce sont d'autres types de contenus qu'on peut utiliser à l'intérieur des `pages` et des `blocks`.
 
 **Templates :** Ce sont des contenus rendus en HTML en utilisant des Templates Django.
 
-**Interface Admin :** C'est un interface intuitif permettant de gérer des contenus, utilisateurs et les configurations de site.
+**Interface Admin :** C'est un interface intuitif permettant de gérer des contenus, utilisateurs et les configurations du site.
 
 #### La page index des jobs
 
@@ -157,7 +157,7 @@ python manage.py migrate
 Maintenant, on peut commencer à créer des pages à partir de admin > Pages > add child page. Même après avoir ajouté du contenu à la page, elle n'est visible qu'après la création du `Template`.
 
 **Templates**
-Wagtail requiert que tous ses templates soint la version `snake_case` du nom du modèle. Par exemple, `JobListing` devient, `job_listing`. De plus, il va les chercher dans le repertoire `app_name/templates/app_name`. On va maintenant le `Template` dans `job/templates/job/job_listing.html`
+Wagtail requiert que tous ses templates soient la version `snake_case` du nom du modèle. Par exemple, `JobListing` devient, `job_listing`. De plus, il va les chercher dans le repertoire `app_name/templates/app_name`. On va maintenant créer le `Template` dans `job/templates/job/job_listing.html`
 
 ```html
 {% extends "base.html" %}
@@ -279,7 +279,7 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-A ce niveau, notre `Template` est géré différemment. Le `StreamField` prend une liste de couple en entrée, (`nom`, `type_de_block`) . Pour récupérer le `block` en question,  nn itère à travers les blocks du champs `content` et on compare le type de `block`.
+A ce niveau, notre `Template` est géré différemment. Le `StreamField` prend une liste de couple en entrée, (`nom`, `type_de_block`) . Pour récupérer le `block` en question,  on itère à travers les blocks du champs `content` et on compare le type de `block`.
 
 ```html
 {% extends "base.html" %} 
@@ -335,7 +335,7 @@ Le `Template` `job_page.html`  devient.
 
 ### Gestion de contexte
 
-On va revenir sur la page index des publications. Wagtail est organisé en forme d'un arbre, d'où l'intéret de bien choisir la page parente au moment de la création d'une page. Lorsqu'on souhaite utiliser les donnée d'une page dans une autre, on doit modifier la méthode `get_context`.
+On va revenir sur la page index des publications. Wagtail est organisé en forme d'un arbre, d'où l'intéret de bien choisir la page parente au moment de la création d'une page. Lorsqu'on souhaite utiliser les donnée d'une page dans une autre page, on doit modifier la méthode `get_context`.
 
 On va dans la classe `JobListing` et on modifie la méthode `get_context`.
 
@@ -347,7 +347,7 @@ def get_context(self, request):
     return context
 ```
 
-Après avoir modifié la méthode `get_context`, on peut accéder les objets dans le `Template` avec la variable `jobs`.
+En modifiant la méthode `get_context`, il nous donne la possibilité d'accéder les objets dans le `Template` avec la variable `jobs`.
  [job_listing.html](https://github.com/Thevenel/wagtail_resources/blob/main/snippets/job_listing.html)
 
 ```html
@@ -359,13 +359,13 @@ Après avoir modifié la méthode `get_context`, on peut accéder les objets dan
 
 ## Style
 
-Il n'est pas amusant de travailler avec un CMS sans style. Ajoutons un peu de style. Pour la simplicité, nous allons utiliser `Bootstrap`. Lors de la création du projet, Wagtail crée un dossier `static` dans lequel se trouve un fichier avec ayant le même nom que le projet. Nous allons ajouter notre fichier `bootstrap.min.css` dans le dossier `css`. Ensuite, ajouter le lien dans le fichier `base.html`.
+Il n'est pas amusant de travailler avec un CMS sans style. Ajouter un peu de style. Pour la simplicité, nous allons utiliser `Bootstrap`. Lors de la création du projet, Wagtail crée un dossier `static` dans lequel se trouve un fichier avec ayant le même nom que le projet. Nous allons ajouter notre fichier `bootstrap.min.css` dans le dossier `css`. Ensuite, ajoute le lien dans le fichier `base.html`.
 
 **Job Listing**
 
 **Home Page**
 
-Le model de la page d'accueil est simple à implementer, elle est similaire à la page `job`. Mais on peut aussi ajouter un `block_counts` qui définit le nombre de block maximal ou maximal que peut avoir le `StreamField`. Pour le lien CTA, on procède la même façon que l'image. Cette fois on crée la clé étrangère vers `wagtailcore.Page`, ce qui permet de rédiriger vers une autre page. Enfin, la méthode `get_context` nous permet de récupérer les trois derniers `jobs` publiés sur la page d'accueil.
+Le model de la page d'accueil est simple à implementer, elle est similaire à la page `job`. Mais on peut aussi ajouter un `block_counts` qui définit le nombre de `block` minimal ou maximal que peut avoir le `StreamField`. Pour le lien CTA, on procède la même façon que l'image. Cette fois on crée la clé étrangère vers `wagtailcore.Page`, ce qui permet de rédiriger vers une autre page. Enfin, la méthode `get_context` nous permet de récupérer les trois derniers `jobs` publiés sur la page d'accueil.
 
 Dans ce `model`, on utilise `MultiFieldPanel` pour regrouper les champs dans l'interface utilisateur.
 
@@ -435,9 +435,9 @@ Le template
 
 ## La barre de navigation
 
-Pour créer la barre de navigation, il est nécessaire de comprendre la strucure d'un arbre. En effet, la page d'accueil est la racine et toutes autres pages y sont rattachées.
+Pour créer la barre de navigation, il est nécessaire de comprendre la strucure d'un arbre. En effet, la page d'accueil est la racine et toutes les autres pages qui y sont rattachées.
 
-On va commencer par créer un fichier qu'on appelera `templatetags/navigation_tags.py` dans le repertoire `home`. Ce fichier va nous permet de récupérer la racine de notre site à l'aide de la classe `Site`, pour plus d'infos consulter la documentation ici.
+On va commencer par créer un fichier qu'on appelera `templatetags/navigation_tags.py` dans le repertoire `home`. Ce fichier va nous permettre de récupérer la racine de notre site à l'aide de la classe `Site`, pour plus d'infos consulter la documentation ici.
 
 ```python
 from django import template
@@ -450,7 +450,7 @@ def get_site_root(context):
     return Site.find_for_request(context["request"]).root_page
 ```
 
-On utilise la class `Library` du package `template` de Django récupérer le context et en créer une annotation. Pour finir, la méthode `get_site_root` récupère la racine à partir de la requête. C'est bien cette méthode qu'on va utiliser dans notre `template`.
+On utilise la class `Library` du package `template` de Django récupérer le `context` et créer une annotation. Pour finir, la méthode `get_site_root` récupère la racine à partir de la requête. C'est bien cette méthode qu'on va utiliser dans notre `template`.
 
 On peut maintenant passer à l'étape suivante qui est de créer un `jobboard/templates/includes/header.html`. Ce fichier utilisera notre méthode pour créer la navigation.
 
@@ -476,9 +476,9 @@ Dans cette portion de code, on crée un alias pour notre méthode `get_site_root
 
 ## Le pied de page
 
-À ce point, l'implementation du pied de page nous parraitra plus simple car on comprend mieux le principe. Toutefois, il existe deux types d'implementation. La première se fait en créant des paramètres de navigation et la seconde à l'aide de `snippets`. Pour faire simple, on va utiliser la méthode, vous pouvez voir la seconde implementation [ici](https://docs.wagtail.org/en/latest/tutorial/create_footer_for_all_pages.html#create-editable-footer-text-with-wagtail-snippets).
+À ce point, l'implementation du pied de page nous parraitra plus simple car on comprend mieux le principe. Toutefois, il existe deux types d'implementation. La première se fait en créant des paramètres de navigation et la seconde à l'aide de `snippets`. Pour faire simple, on va utiliser la première méthode, vous pouvez voir la seconde implementation [ici](https://docs.wagtail.org/en/latest/tutorial/create_footer_for_all_pages.html#create-editable-footer-text-with-wagtail-snippets).
 
-> Il est recommandé de créer une app `base` dans laquelle se trouve tous fichiers mais, on l'ajouter dans `home/models.py` pour simplifier la tache.
+> Il est recommandé de créer une `app` `base` dans laquelle se trouve tous fichiers mais, on peut l'ajouter dans `home/models.py` pour simplifier la tache.
 
 ```python
 # new imports
@@ -516,7 +516,7 @@ INSTALLED_APPS = [
 ]
 ```
 
-La prochaine étape consiste à enregistrer les paramètres dans le processeur de context. Ce dernier rend les paramètres accessibles dans les `templates`. Pour y enregistrer les paramètres, on ajoute cette ligne dans `jobboard/settings/base.py`: `"wagtail.contrib.settings.context_processors.settings",`
+La prochaine étape consiste à enregistrer les paramètres dans le processeur de contexte. Ce dernier rend les paramètres accessibles dans les `templates`. Pour y enregistrer les paramètres, on ajoute cette ligne dans `jobboard/settings/base.py`: `"wagtail.contrib.settings.context_processors.settings",`
 
 ```python
 TEMPLATES = [
